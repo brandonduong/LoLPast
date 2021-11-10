@@ -1,6 +1,7 @@
 <template>
   <div class="body">
     <div id="app">
+      <!--
       <nav class="navbar navbar-expand navbar-dark bg-dark px-5">
         <div class="container-fluid">
           <router-link
@@ -29,8 +30,9 @@
           </div>
         </div>
       </nav>
+      -->
 
-      <div class="containe mt-5">
+      <div class="container p-5">
         <router-view />
       </div>
     </div>

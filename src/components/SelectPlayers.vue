@@ -1,25 +1,30 @@
 <template>
+  <h1 class="lol-past">LoLPast</h1>
   <div class="submit-form">
     <div v-if="!submitted">
       <div class="form-group card summoner-input">
+        <h3
+          style="font-weight: bolder"
+        >
+          Summoner Names
+        </h3>
         <div
           v-for="(player, index) in players"
           :key="index"
         >
-          <h3
-            for="{{index}}"
-            style="font-weight: bolder"
-          >Summoner {{ index.slice(6) }}</h3>
           <input
             id="{{index}}"
             v-model="players[index]"
             type="text"
             class="form-control summoner-item"
             name="{{index}}"
-            placeholder="Enter summoner name"
+            :placeholder="'Summoner ' + index.slice(6)"
           >
         </div>
-        <div class="add-remove-buttons" style="text-align:end">
+        <div
+          class="add-remove-buttons"
+          style="text-align:end"
+        >
           <button
             v-if="Object.keys(players).length < 10"
             class="btn btn-success add-remove-button"
@@ -35,6 +40,12 @@
             -
           </button>
         </div>
+
+        <h3
+            style="font-weight: bolder"
+        >
+          Regions
+        </h3>
 
         <h5 v-if="errors.length">
           <b>Please correct the following error(s):</b>
@@ -58,7 +69,10 @@
       </div>
     </div>
 
-    <div v-else>
+    <div
+      v-else
+      class="card summoner-input"
+    >
       <div
         v-for="(match, index) in coincidingMatches"
         :key="index"
@@ -156,10 +170,12 @@ export default {
 .add-remove-button {
   width: 35px;
   font-weight: bolder;
+  height: 35px;
 }
 
-.add-remove-button {
-  margin-top: -35px;
+.add-remove-buttons {
+  margin-top: -5px;
+  margin-bottom: 25px;
 }
 
 .btn-danger {
@@ -172,7 +188,13 @@ export default {
 }
 
 .summoner-item {
-  margin-bottom: 25px;
+  margin-bottom: 5px;
+}
+
+.lol-past {
+  font-weight: bold;
+  font-size: 64px;
+  font-family: Candara, serif;
 }
 
 </style>
