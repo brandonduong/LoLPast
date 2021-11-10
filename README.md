@@ -1,4 +1,4 @@
-# lolpast
+# LoLPast
 
 ## Project setup
 ```
