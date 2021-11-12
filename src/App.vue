@@ -32,7 +32,7 @@
       </nav>
       -->
 
-      <div class="container p-5">
+      <div class="container p-lg-5 p-sm-1">
         <router-view />
       </div>
     </div>

@@ -1,7 +1,12 @@
 <template>
-  <h1 class="lol-past">LoLPast</h1>
-  <div class="submit-form">
-    <div v-if="!submitted">
+  <h1 class="lol-past">
+    LoLPast
+  </h1>
+  <div>
+    <div
+      v-if="!submitted"
+      class="submit-form"
+    >
       <div class="form-group card summoner-input">
         <h3
           style="font-weight: bolder"
@@ -41,11 +46,58 @@
           </button>
         </div>
 
-        <h3
+        <div class="region-select">
+          <h3
             style="font-weight: bolder"
-        >
-          Regions
-        </h3>
+          >
+            Regions
+          </h3>
+          <select
+            v-model="region"
+            class="form-select"
+          >
+            <option
+              value=""
+              selected
+              disabled
+            >
+              Select region...
+            </option>
+            <option value="na1">
+              North America
+            </option>
+            <option value="kr">
+              Korea
+            </option>
+            <option value="euw1">
+              Europe West
+            </option>
+            <option value="eun1">
+              Europe Nordic & East
+            </option>
+            <option value="jp1">
+              Japan
+            </option>
+            <option value="oc1">
+              Oceania
+            </option>
+            <option value="br1">
+              Brazil
+            </option>
+            <option value="la1">
+              LAN
+            </option>
+            <option value="la2">
+              LAS
+            </option>
+            <option value="ru">
+              Russia
+            </option>
+            <option value="tr1">
+              Turkey
+            </option>
+          </select>
+        </div>
 
         <h5 v-if="errors.length">
           <b>Please correct the following error(s):</b>
@@ -71,16 +123,13 @@
 
     <div
       v-else
-      class="card summoner-input"
+      class="card matches"
     >
-      <div
-        v-for="(match, index) in coincidingMatches"
-        :key="index"
-      >
-        <span>
-          Match {{ index + 1 }}: {{ match }}
-        </span>
-      </div>
+      <CoincidingMatches
+        :coinciding-matches="coincidingMatches"
+        :player-names="JSON.stringify(players)"
+        :player-ids="JSON.stringify(puuids)"
+      />
       <button
         class="btn btn-success"
         @click="newSearch"
@@ -93,9 +142,13 @@
 
 <script>
 import DataService from "../services/DataService";
+import CoincidingMatches from "./CoincidingMatches";
 
 export default {
   name: "SelectPlayers",
+  components: {
+    CoincidingMatches
+  },
   data() {
     return {
       players: {
@@ -103,8 +156,10 @@ export default {
         player2: '',
       },
       coincidingMatches: [],
+      puuids: [],
       submitted: false,
-      errors: []
+      errors: [],
+      region: '',
     };
   },
   methods: {
@@ -114,8 +169,13 @@ export default {
       // If user added a player but didn't give username, don't send request
       for (let player in this.players) {
         if (this.players[player] === '') {
-          errors.add('Summoner name missing.')
+          errors.add('Summoner name is missing.')
         }
+      }
+
+      // If no region selected
+      if (!this.region) {
+        errors.add('Region is missing')
       }
 
       this.errors = Array.from(errors);
@@ -123,12 +183,14 @@ export default {
       if (this.errors.length === 0) {
         const data = {
           players: this.players,
+          region: this.region
         };
         console.log(data)
         DataService.getCoincidingMatches(data)
             .then(response => {
               console.log(response.data);
-              this.coincidingMatches = response.data;
+              this.coincidingMatches = response.data.matches;
+              this.puuids = response.data.puuids;
               this.submitted = true;
             })
             .catch(e => {
@@ -140,6 +202,7 @@ export default {
     newSearch() {
       this.submitted = false;
       this.coincidingMatches = [];
+      this.puuids = []
     },
 
     addPlayer() {
@@ -175,7 +238,6 @@ export default {
 
 .add-remove-buttons {
   margin-top: -5px;
-  margin-bottom: 25px;
 }
 
 .btn-danger {
@@ -187,8 +249,18 @@ export default {
   padding: 25px;
 }
 
+.matches {
+  max-width: 700px;
+  padding: 25px;
+  margin: auto;
+}
+
 .summoner-item {
   margin-bottom: 5px;
+}
+
+.region-select {
+  margin-bottom: 25px;
 }
 
 .lol-past {
