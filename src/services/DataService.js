@@ -26,6 +26,11 @@ class DataService {
 
         return http.get(link);
     }
+
+    getPatch() {
+        const patchUrl = 'https://ddragon.leagueoflegends.com/api/versions.json'
+        return http.get(patchUrl);
+    }
 }
 
 export default new DataService();

@@ -127,8 +127,9 @@
     >
       <CoincidingMatches
         :coinciding-matches="coincidingMatches"
-        :player-names="JSON.stringify(players)"
-        :player-ids="JSON.stringify(puuids)"
+        :player-names="players"
+        :player-ids="puuids"
+        :patch="patch"
       />
       <button
         class="btn btn-success"
@@ -156,11 +157,23 @@ export default {
         player2: '',
       },
       coincidingMatches: [],
-      puuids: [],
+      puuids: {},
       submitted: false,
       errors: [],
       region: '',
+      patch: ''
     };
+  },
+  created() {
+    DataService.getPatch()
+        .then(response => {
+          console.log(response.data);
+          this.patch = response.data[0];
+          console.log(this.patch);
+        })
+        .catch(e => {
+          console.log(e);
+        });
   },
   methods: {
     getCoincidingMatches() {
