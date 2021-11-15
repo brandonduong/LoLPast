@@ -1,6 +1,9 @@
 <template>
   <div class="body">
     <div id="app">
+      <h1 class="lol-past">
+        LoLPast
+      </h1>
       <!--
       <nav class="navbar navbar-expand navbar-dark bg-dark px-5">
         <div class="container-fluid">
@@ -32,7 +35,7 @@
       </nav>
       -->
 
-      <div class="container p-lg-5 p-sm-1">
+      <div class="container p-1">
         <router-view />
       </div>
     </div>
@@ -68,5 +71,12 @@ export default {
   width: 100%;
   min-height: 100vh;
   background-color: #67678f;
+}
+
+.lol-past {
+  font-weight: bold;
+  font-size: 64px;
+  font-family: Candara, serif;
+  padding-top: 50px;
 }
 </style>

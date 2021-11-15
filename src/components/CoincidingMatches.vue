@@ -17,7 +17,7 @@
     :key="index"
   >
     <div
-      class="list-group-item"
+      class="list-group-item match"
       style="margin-bottom: 5px"
       :data-bs-target="'#collapseTarget'+match"
       data-bs-toggle="collapse"
@@ -102,5 +102,36 @@ export default {
   margin-bottom: 5px;
   margin-top: -5px;
   border-top-width: 0;
+  padding-left: 10px;
+  padding-right: 10px;
+  overflow-x: auto;
+}
+
+.match-details::-webkit-scrollbar {
+  background: #f1f1f1;
+  height: 10px;
+}
+
+/* Track */
+.match-details::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Handle */
+.match-details::-webkit-scrollbar-thumb {
+  background: #888;
+}
+
+/* Handle on hover */
+.match-details::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+.match-details::-webkit-scrollbar-thumb:active {
+  background: #282828;
+}
+
+.match {
+  cursor: pointer;
 }
 </style>

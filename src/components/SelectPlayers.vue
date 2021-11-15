@@ -1,7 +1,4 @@
 <template>
-  <h1 class="lol-past">
-    LoLPast
-  </h1>
   <div>
     <div
       v-if="!submitted"
@@ -32,14 +29,14 @@
         >
           <button
             v-if="Object.keys(players).length < 10"
-            class="btn btn-success add-remove-button"
+            class="btn btn-success add-remove-button shadow-none"
             @click="addPlayer"
           >
             +
           </button>
           <button
             v-if="Object.keys(players).length > 2"
-            class="btn btn-danger add-remove-button"
+            class="btn btn-danger add-remove-button shadow-none"
             @click="removePlayer"
           >
             -
@@ -113,7 +110,7 @@
           </ul>
         </h5>
         <button
-          class="btn btn-success search"
+          class="btn btn-secondary shadow-none"
           @click="getCoincidingMatches"
         >
           Search
@@ -132,7 +129,7 @@
         :patch="patch"
       />
       <button
-        class="btn btn-success"
+        class="btn btn-secondary"
         @click="newSearch"
       >
         New Search
@@ -258,14 +255,27 @@ export default {
   background-color: darkred;
 }
 
+.btn-success {
+  border: darkgreen;
+  background-color: darkgreen;
+}
+
+.btn-secondary, .btn-secondary:focus {
+  background-color: #67678f;
+}
+
+.btn-secondary:hover {
+  background-color: #5a5a7c;
+}
+
 .summoner-input {
   padding: 25px;
 }
 
 .matches {
-  max-width: 700px;
+  max-width: 90vw;
   padding: 25px;
-  margin: auto;
+  margin: auto auto 25px;
 }
 
 .summoner-item {
@@ -275,11 +285,4 @@ export default {
 .region-select {
   margin-bottom: 25px;
 }
-
-.lol-past {
-  font-weight: bold;
-  font-size: 64px;
-  font-family: Candara, serif;
-}
-
 </style>
