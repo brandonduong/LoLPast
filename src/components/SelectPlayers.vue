@@ -207,7 +207,6 @@ export default {
   },
   methods: {
     getCoincidingMatches() {
-      this.loading = true;
       const errors = new Set([]);
 
       // If user added a player but didn't give username, don't send request
@@ -231,6 +230,7 @@ export default {
           limit: this.limit
         };
         console.log(data)
+        this.loading = true;
         DataService.getCoincidingMatches(data)
             .then(response => {
               console.log(response.data);
