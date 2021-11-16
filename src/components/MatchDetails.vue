@@ -11,8 +11,15 @@
         {{ getQueueType(matchInfo['queueId']) }}
       </div>
       <div class="col">
-        {{ Math.floor(matchInfo['gameDuration'] / 60) }}m
-        {{ matchInfo['gameDuration'] - (Math.floor(matchInfo['gameDuration'] / 60)) * 60 }}s
+        <!-- By riot api, if no gameEndTimeStamp, treat as seconds, else, as ms-->
+        <span v-if="matchInfo['gameEndTimestamp']">
+          {{ Math.floor(matchInfo['gameDuration'] / 60) }}m
+          {{ matchInfo['gameDuration'] - (Math.floor(matchInfo['gameDuration'] / 60)) * 60 }}s
+        </span>
+        <span v-else>
+          {{ Math.floor(matchInfo['gameDuration'] / 60 / 1000) }}m
+          {{ Math.floor((matchInfo['gameDuration'] / 1000) - ((Math.floor(matchInfo['gameDuration'] / 60 / 1000))) * 60) }}s
+        </span>
       </div>
     </div>
 
