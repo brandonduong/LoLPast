@@ -4,13 +4,17 @@
     style="width: 99%"
   >
     <div class="row flex-nowrap">
+      <div
+          class="col champion"
+          style="margin-left: 27px"
+      />
       <div class="col-3" style="min-width: 300px">
         {{ new Date(matchInfo['gameCreation']).toDateString() }}
       </div>
-      <div class="col">
+      <div class="col-4">
         {{ getQueueType(matchInfo['queueId']) }}
       </div>
-      <div class="col-3" style="min-width: 300px">
+      <div class="col-4" style="min-width: 300px">
         <!-- By riot api, if no gameEndTimeStamp, treat as seconds, else, as ms-->
         <span v-if="matchInfo['gameEndTimestamp']">
           {{ Math.floor(matchInfo['gameDuration'] / 60) }}m
@@ -82,7 +86,7 @@
                 <div>
                   <img
                     :src="getChampIcon(playerId)"
-                    :alt="matchInfo.info"
+                    :alt="getChampIcon(playerId)"
                     width="27"
                     height="27"
                     style="border-radius: 50%;"
@@ -193,7 +197,7 @@
                 <div>
                   <img
                     :src="getChampIcon(playerId)"
-                    :alt="matchInfo.info"
+                    :alt="getChampIcon(playerId)"
                     width="27"
                     height="27"
                     style="border-radius: 50%;"

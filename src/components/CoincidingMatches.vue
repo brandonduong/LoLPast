@@ -18,7 +18,7 @@
   >
     <div
       class="list-group-item match"
-      style="margin-bottom: 5px"
+      :style="getStyleForMatchId(match)"
       :data-bs-target="'#collapseTarget'+match"
       data-bs-toggle="collapse"
       @click="getMatchDetails(match)"
@@ -78,6 +78,16 @@ export default {
         this.matchDetails.push(matchId);
       }
     },
+    getStyleForMatchId(matchId) {
+      if (this.matchDetails.includes(matchId)) {
+        return {
+          "background-color": '#819de7'
+        }
+      }
+      return {
+        "background-color": '#a293d5'
+      }
+    }
   }
 }
 </script>
@@ -121,5 +131,6 @@ export default {
 .match {
   cursor: pointer;
   font-size: 20px;
+  margin-bottom: 5px
 }
 </style>
