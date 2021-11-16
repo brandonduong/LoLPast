@@ -1,7 +1,7 @@
 <template>
   <div>
     <div
-      v-if="!submitted"
+      v-if="!submitted && !loading"
       class="submit-form"
     >
       <div class="form-group card summoner-input">
@@ -96,6 +96,26 @@
           </select>
         </div>
 
+        <div class="region-select">
+          <h3
+            style="font-weight: bolder"
+          >
+            Check Past Games
+          </h3>
+          <select
+            v-model="limit"
+            class="form-select"
+          >
+            <option
+              v-for="limit in possibleLimits()"
+              :value="limit"
+              selected
+            >
+              {{ limit }}
+            </option>
+          </select>
+        </div>
+
         <h5 v-if="errors.length">
           <b>Please correct the following error(s):</b>
           <ul>
@@ -118,8 +138,19 @@
       </div>
     </div>
 
+    <div v-else-if="loading">
+      <div class="card loading-card">
+        <div
+          class="spinner-border"
+          role="status"
+        >
+          <span class="visually-hidden">Loading...</span>
+        </div>
+      </div>
+    </div>
+
     <div
-      v-else
+      v-else-if="submitted"
       class="card matches"
     >
       <CoincidingMatches
@@ -158,7 +189,9 @@ export default {
       submitted: false,
       errors: [],
       region: '',
-      patch: ''
+      patch: '',
+      limit: 100,
+      loading: false,
     };
   },
   created() {
@@ -174,6 +207,7 @@ export default {
   },
   methods: {
     getCoincidingMatches() {
+      this.loading = true;
       const errors = new Set([]);
 
       // If user added a player but didn't give username, don't send request
@@ -193,7 +227,8 @@ export default {
       if (this.errors.length === 0) {
         const data = {
           players: this.players,
-          region: this.region
+          region: this.region,
+          limit: this.limit
         };
         console.log(data)
         DataService.getCoincidingMatches(data)
@@ -202,6 +237,7 @@ export default {
               this.coincidingMatches = response.data.matches;
               this.puuids = response.data.puuids;
               this.submitted = true;
+              this.loading = false;
             })
             .catch(e => {
               console.log(e);
@@ -229,6 +265,17 @@ export default {
         delete this.players[`player${currentPlayerTotal}`];
       }
       console.log(this.players);
+    },
+
+    possibleLimits() {
+      const CHECK_PAST_GAMES_LIMIT = 2000; // From backend
+      const limits = [];
+      for (let i = 100; i < CHECK_PAST_GAMES_LIMIT; i += 50) {
+        if (i * Object.keys(this.players).length <= CHECK_PAST_GAMES_LIMIT) {
+          limits.push(i);
+        }
+      }
+      return limits;
     }
   }
 }
@@ -237,6 +284,11 @@ export default {
 <style>
 .submit-form {
   max-width: 350px;
+  margin: auto;
+}
+
+.loading-card {
+  height: 350px;
   margin: auto;
 }
 
@@ -284,5 +336,17 @@ export default {
 
 .region-select {
   margin-bottom: 25px;
+}
+
+.limit {
+  padding-left: 100px;
+  padding-right: 100px;
+}
+
+.spinner-border {
+  margin: auto;
+  width: 5rem;
+  height: 5rem;
+  color: #5a5a7c;
 }
 </style>

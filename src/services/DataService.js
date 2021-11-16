@@ -5,6 +5,7 @@ class DataService {
         let link = '/getcoincidingmatches/?'
         const players = data.players;
         const region = data.region;
+        const limit = data.limit;
         console.log(players);
         let playerNum = 1;
         for (let i in players) {
@@ -18,6 +19,9 @@ class DataService {
 
         // Add region to queryStringParameters
         link += `region=${region}`;
+
+        // Add limit to queryStringParameters
+        link += `&limit=${limit}`;
         return http.get(link);
     }
 

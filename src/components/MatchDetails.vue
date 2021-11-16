@@ -1,12 +1,15 @@
 <template>
-  <div style="max-width: 1148px">
+  <div style="width: 99%">
     <div class="row">
+      <div class="col">
+        {{ new Date(matchInfo['gameCreation']).toDateString() }}
+      </div>
+      <div class="col">
+        {{ getQueueType(matchInfo['queueId']) }}
+      </div>
       <div class="col">
         {{ Math.floor(matchInfo['gameDuration'] / 60) }}m
         {{ matchInfo['gameDuration'] - (Math.floor(matchInfo['gameDuration'] / 60)) * 60 }}s
-      </div>
-      <div class="col">
-        {{ new Date(matchInfo['gameCreation']).toDateString() }}
       </div>
     </div>
 
@@ -273,17 +276,21 @@ export default {
     Array.from(document.querySelectorAll('[data-bs-toggle="popover"]'))
         .forEach(popoverNode => new Popover(popoverNode))
 
+    // Initialize all player ids
     let currentPlayerTotal = Object.keys(this.playerIds).length;
-
-    Object.values(this.playerNames).forEach((playerName) => {
-      this.allPlayerIds[playerName] = this.playerIds[encodeURIComponent(playerName)]
-    })
 
     this.matchMetadata['participants'].forEach((participantId) => {
       if (!Object.values(this.playerIds).includes(participantId)) {
         this.unsearchedPlayerIds.push(participantId);
         this.allPlayerIds[`player${currentPlayerTotal + 1}`] = participantId;
         currentPlayerTotal += 1;
+      } else {
+        let correspondingName = '';
+        Object.keys(this.playerIds).forEach((playerName) => {
+          if (this.playerIds[playerName] === participantId) {
+            this.allPlayerIds[playerName] = participantId;
+          }
+        })
       }
     });
 
@@ -297,7 +304,6 @@ export default {
     },
     getChampIcon(playerId) {
       const baseUrl = `https://ddragon.leagueoflegends.com/cdn/${this.patch}/img/champion/`;
-      console.log(playerId)
       return baseUrl + `${this.matchInfo['participants'][this.getPlayerIdIndex(playerId)]['championName']}.png`
     },
     getKDA(playerId) {
@@ -343,6 +349,23 @@ export default {
     },
     getVictor() {
       return this.matchInfo['teams'][0]['win'] // Whether or not blue team won
+    },
+    getQueueType(queueId) {
+      switch (queueId) {
+        case 400:
+          return 'NORMAL';
+        case 420:
+          return 'RANKED SOLO/DUO'
+        case 440:
+          return '5v5 FLEX';
+        case 450:
+          return 'ARAM';
+        case 900:
+          return 'URF';
+
+        default:
+          return queueId;
+      }
     }
   }
 }

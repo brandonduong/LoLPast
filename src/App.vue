@@ -2,7 +2,7 @@
   <div class="body">
     <div id="app">
       <h1 class="lol-past">
-        LoLPast
+        <a href="/">LoLPast</a>
       </h1>
       <!--
       <nav class="navbar navbar-expand navbar-dark bg-dark px-5">
@@ -78,5 +78,10 @@ export default {
   font-size: 64px;
   font-family: Candara, serif;
   padding-top: 50px;
+}
+
+a:active, a:link, a:visited, a:hover {
+  text-decoration: none;
+  color: black !important;
 }
 </style>

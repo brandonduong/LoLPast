@@ -6,7 +6,7 @@ const routes =  [
         alias: "/selectPlayers",
         name: "selectPlayers",
         component: () => import("./components/SelectPlayers")
-    }
+    },
 ];
 
 const router = createRouter({

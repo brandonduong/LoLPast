@@ -102,8 +102,7 @@ export default {
   margin-bottom: 5px;
   margin-top: -5px;
   border-top-width: 0;
-  padding-left: 10px;
-  padding-right: 10px;
+  padding-left: 25px;
   overflow-x: auto;
 }
 
