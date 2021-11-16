@@ -1,5 +1,8 @@
 <template>
-  <div style="width: 99%">
+  <div
+    v-if="!loading"
+    style="width: 99%"
+  >
     <div class="row">
       <div class="col">
         {{ new Date(matchInfo['gameCreation']).toDateString() }}
@@ -235,10 +238,21 @@
       </div>
     </div>
   </div>
+  <div v-else-if="loading">
+    <div class="card loading-card border-0">
+      <div
+        class="spinner-border"
+        role="status"
+      >
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
 import { Popover } from 'bootstrap/dist/js/bootstrap.esm.min.js'
+import DataService from "../services/DataService";
 
 export default {
   name: "MatchDetails",
@@ -255,48 +269,62 @@ export default {
       default: () => {return ''},
       type: String
     },
-    matchInfo: {
-      default: () => {return {}},
-      type: Object
-    },
-    matchMetadata: {
-      default: () => {return {}},
-      type: Object
+    matchId: {
+      default: () => {return ''},
+      type: String
     },
   },
   data() {
     return {
       playerIndex: {},
       allPlayerIds: {},
-      unsearchedPlayerIds: []
+      unsearchedPlayerIds: [],
+      matchMetadata: {},
+      matchInfo: {},
+      loading: true
     };
   },
   mounted() {
-    // Initialize Popover
-    Array.from(document.querySelectorAll('[data-bs-toggle="popover"]'))
-        .forEach(popoverNode => new Popover(popoverNode))
+    // Initialize data
+    const data = {
+      matchId: this.matchId
+    };
+    DataService.getMatchDetails(data)
+        .then(response => {
+          // Set all needed data
+          console.log(response.data);
+          this.matchMetadata = JSON.parse(response.data).metadata;
+          this.matchInfo = JSON.parse(response.data).info;
+          console.log(this.matchMetadata);
+          console.log(this.matchInfo);
+          this.loading = false;
 
-    // Initialize all player ids
-    let currentPlayerTotal = Object.keys(this.playerIds).length;
+          // Initialize Popover
+          Array.from(document.querySelectorAll('[data-bs-toggle="popover"]'))
+              .forEach(popoverNode => new Popover(popoverNode))
 
-    this.matchMetadata['participants'].forEach((participantId) => {
-      if (!Object.values(this.playerIds).includes(participantId)) {
-        this.unsearchedPlayerIds.push(participantId);
-        this.allPlayerIds[`player${currentPlayerTotal + 1}`] = participantId;
-        currentPlayerTotal += 1;
-      } else {
-        let correspondingName = '';
-        Object.keys(this.playerIds).forEach((playerName) => {
-          if (this.playerIds[playerName] === participantId) {
-            this.allPlayerIds[playerName] = participantId;
-          }
+          // Initialize all player ids
+          let currentPlayerTotal = Object.keys(this.playerIds).length;
+
+          this.matchMetadata['participants'].forEach((participantId) => {
+            if (!Object.values(this.playerIds).includes(participantId)) {
+              this.unsearchedPlayerIds.push(participantId);
+              this.allPlayerIds[`player${currentPlayerTotal + 1}`] = participantId;
+              currentPlayerTotal += 1;
+            } else {
+              let correspondingName = '';
+              Object.keys(this.playerIds).forEach((playerName) => {
+                if (this.playerIds[playerName] === participantId) {
+                  this.allPlayerIds[playerName] = participantId;
+                }
+              })
+            }
+          });
+          console.log(this.allPlayerIds);
         })
-      }
-    });
-
-    console.log(this.allPlayerIds);
-  },
-  created() {
+        .catch(e => {
+          console.log(e);
+        });
   },
   methods: {
     getPlayerIdIndex(playerId) {

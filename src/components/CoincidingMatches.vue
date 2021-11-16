@@ -26,7 +26,7 @@
       <span style="font-weight: bold">Match {{ index + 1 }}:</span> {{ match }}
     </div>
     <div
-      v-if="matchDetails[match]"
+      v-if="matchDetails.includes(match)"
       :id="'collapseTarget'+match"
       class="collapse show py-2 match-details"
     >
@@ -34,8 +34,7 @@
         :player-names="playerNames"
         :player-ids="playerIds"
         :patch="patch"
-        :match-info="JSON.parse(matchDetails[match]).info"
-        :match-metadata="JSON.parse(matchDetails[match]).metadata"
+        :match-id="match"
       />
     </div>
   </div>
@@ -70,24 +69,13 @@ export default {
   },
   data() {
     return {
-      matchDetails: {}
+      matchDetails: []
     };
   },
   methods: {
     getMatchDetails(matchId) {
-      if (!this.matchDetails[matchId]) {
-        const data = {
-          matchId
-        };
-        DataService.getMatchDetails(data)
-            .then(response => {
-              console.log(response.data);
-              this.matchDetails[matchId] = response.data;
-              console.log(this.matchDetails);
-            })
-            .catch(e => {
-              console.log(e);
-            });
+      if (!this.matchDetails.includes(matchId)) {
+        this.matchDetails.push(matchId);
       }
     },
   }

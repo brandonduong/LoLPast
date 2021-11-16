@@ -288,7 +288,7 @@ export default {
 }
 
 .loading-card {
-  height: 350px;
+  height: 340px;
   margin: auto;
 }
 
