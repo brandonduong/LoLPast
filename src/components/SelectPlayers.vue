@@ -325,8 +325,7 @@ export default {
 }
 
 .matches {
-  max-width: 90vw;
-  padding: 25px;
+  padding: 5px;
   margin: auto auto 25px;
 }
 

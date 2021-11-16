@@ -3,14 +3,14 @@
     v-if="!loading"
     style="width: 99%"
   >
-    <div class="row">
-      <div class="col">
+    <div class="row flex-nowrap">
+      <div class="col-3" style="min-width: 300px">
         {{ new Date(matchInfo['gameCreation']).toDateString() }}
       </div>
       <div class="col">
         {{ getQueueType(matchInfo['queueId']) }}
       </div>
-      <div class="col">
+      <div class="col-3" style="min-width: 300px">
         <!-- By riot api, if no gameEndTimeStamp, treat as seconds, else, as ms-->
         <span v-if="matchInfo['gameEndTimestamp']">
           {{ Math.floor(matchInfo['gameDuration'] / 60) }}m

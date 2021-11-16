@@ -6,7 +6,7 @@
   </h3>
   <small style="margin-bottom: -6px">with
   </small>
-  <small>
+  <small style="font-size: 20px">
     <em>
       {{ Object.values(playerNames).join(', ') }}
     </em>
@@ -23,7 +23,7 @@
       data-bs-toggle="collapse"
       @click="getMatchDetails(match)"
     >
-      <span style="font-weight: bold">Match {{ index + 1 }}:</span> {{ match }}
+      <span style="font-weight: bold;">Match {{ index + 1 }}:</span> {{ match }}
     </div>
     <div
       v-if="matchDetails.includes(match)"
@@ -120,5 +120,6 @@ export default {
 
 .match {
   cursor: pointer;
+  font-size: 20px;
 }
 </style>
