@@ -12,19 +12,27 @@
     </em>
   </small>
 
+  <WinrateHeader :winrates="winrates" />
+
   <div
-    v-if="!openingAll"
-    class="btn-success"
+    v-if="!openingAll && canGetAllMatches()"
+    class="btn btn-success"
     @click="getAllMatchDetails()"
   >
     Open All
   </div>
   <div
-    v-if="openingAll"
-    class="btn-danger disabled"
+    v-else-if="openingAll && canGetAllMatches()"
+    class="btn btn-danger"
     @click="cancelOpeningAll()"
   >
     Cancel
+  </div>
+  <div
+    v-else-if="!canGetAllMatches()"
+    class="btn btn-dark disabled"
+  >
+    No Matches Left
   </div>
 
   <div
@@ -52,6 +60,7 @@
         :patch="patch"
         :match-id="match"
         @fail="handleFailGetMatchDetails"
+        @add-winrate="addWinrate"
       />
     </div>
   </div>
@@ -60,10 +69,12 @@
 <script>
 import DataService from "../services/DataService";
 import MatchDetails from "./MatchDetails";
+import WinrateHeader from "./WinrateHeader";
 
 export default {
   name: "CoincidingMatches",
   components: {
+    WinrateHeader,
     MatchDetails
   },
   props: {
@@ -90,6 +101,7 @@ export default {
       openingAll: false,
       timers: [],
       lastAutoOpened: 0,
+      winrates: {}
     };
   },
   methods: {
@@ -109,7 +121,10 @@ export default {
       }
     },
     getAllMatchDetails() {
-      this.openingAll = true;
+      // Only check if there are matches available to check
+      if (this.canGetAllMatches()) {
+        this.openingAll = true;
+      }
 
       // 1 call per second
       const interval = 1000 // How much time between 2 iterations
@@ -117,8 +132,17 @@ export default {
         this.timers.push(setTimeout(() => {
           this.getMatchDetails(this.coincidingMatches[i]);
           this.lastAutoOpened = i;
+
+          // Check if done
+          if (this.lastAutoOpened === this.coincidingMatches.length - 1) {
+            this.openingAll = false;
+          }
         }, (i - this.lastAutoOpened) * interval))
       }
+    },
+    canGetAllMatches() {
+      console.log(this.lastAutoOpened === this.coincidingMatches.length - 1)
+      return !(this.lastAutoOpened === this.coincidingMatches.length - 1)
     },
     cancelOpeningAll() {
       this.openingAll = false;
@@ -130,6 +154,45 @@ export default {
       if (index > -1) {
         this.matchDetails.splice(index, 1);
       }
+    },
+    addWinrate(winTeam, loseTeam) {
+      const winString = winTeam.join();
+      const loseString = loseTeam.join();
+      console.log(winString, loseString);
+
+      // If team is not recorded yet
+      if (!this.winrates[winString] && !this.winrates[loseString]) {
+        // Initialize team data
+        if (!winTeam.length) {
+          this.winrates[loseString] = {};
+          this.winrates[loseString]['wins'] = 0;
+          this.winrates[loseString]['losses'] = 1;
+        } else if (!loseTeam.length) {
+          this.winrates[loseString] = {};
+          this.winrates[loseString]['wins'] = 1;
+          this.winrates[loseString]['losses'] = 0;
+        } else {
+          this.winrates[winString] = {};
+          this.winrates[winString][loseString] = {};
+          this.winrates[winString][loseString]['wins'] = 1;
+          this.winrates[winString][loseString]['losses'] = 0;
+        }
+      } else if (this.winrates[winString]) {
+        // Initialize team data
+        if (!loseTeam.length) {
+          this.winrates[winString]['wins'] += 1;
+        } else if (this.winrates[winString][loseString]){
+          this.winrates[winString][loseString]['wins'] += 1;
+        }
+      } else if (this.winrates[loseString]) {
+        // Initialize team data
+        if (!winTeam.length) {
+          this.winrates[loseString]['losses'] += 1;
+        } else if (this.winrates[loseString][winString]){
+          this.winrates[loseString][winString]['losses'] += 1;
+        }
+      }
+      console.log(this.winrates);
     }
   }
 }

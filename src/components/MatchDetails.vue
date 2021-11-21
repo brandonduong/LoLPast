@@ -5,16 +5,22 @@
   >
     <div class="row flex-nowrap">
       <div
-          class="col champion"
-          style="margin-left: 27px"
+        class="col champion"
+        style="margin-left: 27px"
       />
-      <div class="col-3" style="min-width: 300px">
+      <div
+        class="col-3"
+        style="min-width: 300px"
+      >
         {{ new Date(matchInfo['gameCreation']).toDateString() }}
       </div>
       <div class="col-4">
         {{ getQueueType(matchInfo['queueId']) }}
       </div>
-      <div class="col-4" style="min-width: 300px">
+      <div
+        class="col-4"
+        style="min-width: 300px"
+      >
         <!-- By riot api, if no gameEndTimeStamp, treat as seconds, else, as ms-->
         <span v-if="matchInfo['gameEndTimestamp']">
           {{ Math.floor(matchInfo['gameDuration'] / 60) }}m
@@ -286,7 +292,7 @@ export default {
     },
     method: { type: Function },
   },
-emits: ['fail'],
+  emits: ['fail', 'add-winrate'],
   data() {
     return {
       playerIndex: {},
@@ -334,6 +340,9 @@ emits: ['fail'],
             }
           });
           console.log(this.allPlayerIds);
+
+          // For Winrate Header
+          this.calculateTeamWinrate();
         })
         .catch(e => {
           console.log(e);
@@ -410,9 +419,29 @@ emits: ['fail'],
           return 'ARAM';
         case 900:
           return 'URF';
+        case 1400:
+          return 'ULTIMATES';
 
         default:
           return queueId;
+      }
+    },
+    calculateTeamWinrate() {
+      const blueTeam = [];
+      const redTeam = [];
+      Object.keys(this.playerIds).forEach((playerName) => {
+        const index = this.getPlayerIdIndex(this.playerIds[playerName]);
+        if (index < 5) {
+          blueTeam.push(playerName);
+        } else {
+          redTeam.push(playerName)
+        }
+      })
+
+      if (this.getVictor()) {
+        this.$emit('add-winrate', blueTeam, redTeam);
+      } else {
+        this.$emit('add-winrate', redTeam, blueTeam);
       }
     }
   }
