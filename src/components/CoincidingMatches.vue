@@ -163,11 +163,22 @@ export default {
         this.openingAll = true;
       }
 
+      // Get upper most manually opened match
+      this.coincidingMatches.some((match, index) => {
+        if (this.matchDetails.includes(match)) {
+          this.lastAutoOpened = index;
+        } else {
+          return true; // Short circuit .some
+        }
+      })
+
       // 1 call per second
       const interval = 1000 // How much time between 2 iterations
       for (let i = this.lastAutoOpened; i < this.coincidingMatches.length; i += 1) {
         this.timers.push(setTimeout(() => {
-          this.getMatchDetails(this.coincidingMatches[i]);
+          if (!this.matchDetails.includes(this.coincidingMatches[i])) {
+            this.getMatchDetails(this.coincidingMatches[i]);
+          }
           this.lastAutoOpened = i;
 
           // Check if done
