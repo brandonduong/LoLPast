@@ -116,7 +116,7 @@
               <small
                 v-else
                 class="searched"
-              ><em>{{ index }}</em></small>
+              ><em>{{ decodeURIComponent(index) }}</em></small>
             </a>
           </div>
           <div class="col-2 kda">
@@ -227,7 +227,7 @@
               <small
                 v-else
                 class="searched"
-              ><em>{{ index }}</em></small>
+              ><em>{{ decodeURIComponent(index) }}</em></small>
             </a>
           </div>
           <div class="col-2 kda">
@@ -343,7 +343,13 @@ export default {
     },
     getChampIcon(playerId) {
       const baseUrl = `https://ddragon.leagueoflegends.com/cdn/${this.patch}/img/champion/`;
-      return baseUrl + `${this.matchInfo['participants'][this.getPlayerIdIndex(playerId)]['championName']}.png`
+      const champName = this.matchInfo['participants'][this.getPlayerIdIndex(playerId)]['championName'];
+      // For some reason FiddleSticks is inconsistent with the rest of the icons
+      if (champName === 'FiddleSticks') {
+        return baseUrl + `Fiddlesticks.png`
+      }
+
+      return baseUrl + `${champName}.png`
     },
     getKDA(playerId) {
       const kills = this.matchInfo['participants'][this.getPlayerIdIndex(playerId)]['kills'];

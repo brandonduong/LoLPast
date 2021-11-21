@@ -13,6 +13,21 @@
   </small>
 
   <div
+    v-if="!openingAll"
+    class="btn-success"
+    @click="getAllMatchDetails()"
+  >
+    Open All
+  </div>
+  <div
+    v-if="openingAll"
+    class="btn-danger disabled"
+    @click="cancelOpeningAll()"
+  >
+    Cancel
+  </div>
+
+  <div
     v-for="(match, index) in coincidingMatches"
     :key="index"
   >
@@ -31,6 +46,7 @@
       class="collapse show py-2 match-details"
     >
       <MatchDetails
+        :id="'match-'+match"
         :player-names="playerNames"
         :player-ids="playerIds"
         :patch="patch"
@@ -69,7 +85,10 @@ export default {
   },
   data() {
     return {
-      matchDetails: []
+      matchDetails: [],
+      openingAll: false,
+      timers: [],
+      lastAutoOpened: 0,
     };
   },
   methods: {
@@ -85,8 +104,24 @@ export default {
         }
       }
       return {
-        "background-color": '#a293d5'
+        "background-color": '#8080ad'
       }
+    },
+    getAllMatchDetails() {
+      this.openingAll = true;
+
+      // 1 call per second
+      const interval = 1000 // How much time between 2 iterations
+      for (let i = this.lastAutoOpened; i < this.coincidingMatches.length; i += 1) {
+        this.timers.push(setTimeout(() => {
+          this.getMatchDetails(this.coincidingMatches[i]);
+          this.lastAutoOpened = i;
+        }, (i - this.lastAutoOpened) * interval))
+      }
+    },
+    cancelOpeningAll() {
+      this.openingAll = false;
+      this.timers.forEach(id => clearTimeout(id));
     }
   }
 }
