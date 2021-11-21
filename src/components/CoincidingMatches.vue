@@ -51,6 +51,7 @@
         :player-ids="playerIds"
         :patch="patch"
         :match-id="match"
+        @fail="handleFailGetMatchDetails"
       />
     </div>
   </div>
@@ -122,6 +123,13 @@ export default {
     cancelOpeningAll() {
       this.openingAll = false;
       this.timers.forEach(id => clearTimeout(id));
+    },
+    handleFailGetMatchDetails(matchId) {
+      console.log(matchId)
+      const index = this.matchDetails.indexOf(matchId);
+      if (index > -1) {
+        this.matchDetails.splice(index, 1);
+      }
     }
   }
 }

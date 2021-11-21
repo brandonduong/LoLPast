@@ -284,7 +284,9 @@ export default {
       default: () => {return ''},
       type: String
     },
+    method: { type: Function },
   },
+emits: ['fail'],
   data() {
     return {
       playerIndex: {},
@@ -335,6 +337,7 @@ export default {
         })
         .catch(e => {
           console.log(e);
+          this.$emit('fail', this.matchId);
         });
   },
   methods: {
