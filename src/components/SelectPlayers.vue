@@ -241,6 +241,8 @@ export default {
             })
             .catch(e => {
               console.log(e);
+              this.loading = false;
+              this.errors = ['An input Summoner Name does not exist'];
             });
       }
     },
