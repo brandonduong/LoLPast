@@ -252,6 +252,7 @@ export default {
     },
 
     addPlayer() {
+      this.limit = 100;
       const currentPlayerTotal = Object.keys(this.players).length;
       if (currentPlayerTotal < 10) {
         this.players[`player${currentPlayerTotal + 1}`] = '';

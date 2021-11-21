@@ -1,7 +1,7 @@
 <template>
   <div
     v-if="!loading"
-    style="width: 99%"
+    class="container p-1"
   >
     <div class="row flex-nowrap">
       <div

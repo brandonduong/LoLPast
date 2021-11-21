@@ -1,20 +1,24 @@
 <template>
   <div>
-    <h3
+    <h2
       style="font-weight: bolder; margin-bottom: -6px"
     >
       {{ coincidingMatches.length }} Matches Found
-    </h3>
-    <small style="margin-bottom: -6px">with
+    </h2>
+    <small>with
     </small>
-    <small style="font-size: 20px; display: block">
+    <small style="font-size: 20px; display: block; margin-top: -8px; margin-bottom: -8px">
       <em>
         {{ Object.values(playerNames).join(', ') }}
       </em>
     </small>
   </div>
 
-  <WinrateHeader :winrates="winrates" />
+  <hr>
+  <WinrateHeader
+    v-if="Object.keys(winrates).length > 0"
+    :winrates="winrates"
+  />
 
   <div class="d-grid get-all-matches">
     <div
@@ -105,7 +109,36 @@ export default {
       openingAll: false,
       timers: [],
       lastAutoOpened: 0,
-      winrates: {}
+      winrates: {
+        /*
+        "Qitong": {
+          "The Tank Man": {
+            "wins": 10,
+            "losses": 17
+          },
+          "The Tank Man2": {
+            "wins": 10,
+            "losses": 17
+          },
+          "The Tank Man3": {
+            "wins": 10,
+            "losses": 17
+          },
+        },
+        "Qitong, Tupy": {
+          "The Tank Man, Qitong, Tupy, Qitong, Tupy": {
+            "wins": 10,
+            "losses": 17
+          },
+        },
+        "The Tank Man": {
+          "": {
+            "wins": 10,
+            "losses": 17
+          },
+        },
+        */
+      }
     };
   },
   methods: {
@@ -139,14 +172,15 @@ export default {
 
           // Check if done
           if (this.lastAutoOpened === this.coincidingMatches.length - 1) {
+            this.lastAutoOpened = i + 1;
             this.openingAll = false;
           }
         }, (i - this.lastAutoOpened) * interval))
       }
     },
     canGetAllMatches() {
-      console.log(this.lastAutoOpened === this.coincidingMatches.length - 1)
-      return !(this.lastAutoOpened === this.coincidingMatches.length - 1)
+      console.log(this.lastAutoOpened === this.coincidingMatches.length)
+      return !(this.lastAutoOpened === this.coincidingMatches.length)
     },
     cancelOpeningAll() {
       this.openingAll = false;
@@ -160,8 +194,8 @@ export default {
       }
     },
     addWinrate(winTeam, loseTeam) {
-      const winString = winTeam.join();
-      const loseString = loseTeam.join();
+      const winString = decodeURIComponent(winTeam.join(', '));
+      const loseString = decodeURIComponent(loseTeam.join(', '));
       console.log(winString, loseString);
 
       // If team is not recorded yet
@@ -169,12 +203,14 @@ export default {
         // Initialize team data
         if (!winTeam.length) {
           this.winrates[loseString] = {};
-          this.winrates[loseString]['wins'] = 0;
-          this.winrates[loseString]['losses'] = 1;
+          this.winrates[loseString][winString] = {};
+          this.winrates[loseString][winString]['wins'] = 0;
+          this.winrates[loseString][winString]['losses'] = 1;
         } else if (!loseTeam.length) {
           this.winrates[winString] = {};
-          this.winrates[winString]['wins'] = 1;
-          this.winrates[winString]['losses'] = 0;
+          this.winrates[winString][loseString] = {};
+          this.winrates[winString][loseString]['wins'] = 1;
+          this.winrates[winString][loseString]['losses'] = 0;
         } else {
           this.winrates[winString] = {};
           this.winrates[winString][loseString] = {};
@@ -182,19 +218,9 @@ export default {
           this.winrates[winString][loseString]['losses'] = 0;
         }
       } else if (this.winrates[winString]) {
-        // Initialize team data
-        if (!loseTeam.length) {
-          this.winrates[winString]['wins'] += 1;
-        } else if (this.winrates[winString][loseString]){
           this.winrates[winString][loseString]['wins'] += 1;
-        }
       } else if (this.winrates[loseString]) {
-        // Initialize team data
-        if (!winTeam.length) {
-          this.winrates[loseString]['losses'] += 1;
-        } else if (this.winrates[loseString][winString]){
           this.winrates[loseString][winString]['losses'] += 1;
-        }
       }
       console.log(this.winrates);
     }
