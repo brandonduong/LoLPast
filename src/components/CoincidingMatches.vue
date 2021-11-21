@@ -1,38 +1,42 @@
 <template>
-  <h3
-    style="font-weight: bolder; margin-bottom: -6px"
-  >
-    {{ coincidingMatches.length }} Matches Found
-  </h3>
-  <small style="margin-bottom: -6px">with
-  </small>
-  <small style="font-size: 20px">
-    <em>
-      {{ Object.values(playerNames).join(', ') }}
-    </em>
-  </small>
+  <div>
+    <h3
+      style="font-weight: bolder; margin-bottom: -6px"
+    >
+      {{ coincidingMatches.length }} Matches Found
+    </h3>
+    <small style="margin-bottom: -6px">with
+    </small>
+    <small style="font-size: 20px; display: block">
+      <em>
+        {{ Object.values(playerNames).join(', ') }}
+      </em>
+    </small>
+  </div>
 
   <WinrateHeader :winrates="winrates" />
 
-  <div
-    v-if="!openingAll && canGetAllMatches()"
-    class="btn btn-success"
-    @click="getAllMatchDetails()"
-  >
-    Open All
-  </div>
-  <div
-    v-else-if="openingAll && canGetAllMatches()"
-    class="btn btn-danger"
-    @click="cancelOpeningAll()"
-  >
-    Cancel
-  </div>
-  <div
-    v-else-if="!canGetAllMatches()"
-    class="btn btn-dark disabled"
-  >
-    No Matches Left
+  <div class="d-grid get-all-matches">
+    <div
+      v-if="!openingAll && canGetAllMatches()"
+      class="btn btn-success"
+      @click="getAllMatchDetails()"
+    >
+      Open All
+    </div>
+    <div
+      v-else-if="openingAll && canGetAllMatches()"
+      class="btn btn-danger"
+      @click="cancelOpeningAll()"
+    >
+      Cancel
+    </div>
+    <div
+      v-else-if="!canGetAllMatches()"
+      class="btn btn-dark disabled"
+    >
+      No Matches Left
+    </div>
   </div>
 
   <div
@@ -168,9 +172,9 @@ export default {
           this.winrates[loseString]['wins'] = 0;
           this.winrates[loseString]['losses'] = 1;
         } else if (!loseTeam.length) {
-          this.winrates[loseString] = {};
-          this.winrates[loseString]['wins'] = 1;
-          this.winrates[loseString]['losses'] = 0;
+          this.winrates[winString] = {};
+          this.winrates[winString]['wins'] = 1;
+          this.winrates[winString]['losses'] = 0;
         } else {
           this.winrates[winString] = {};
           this.winrates[winString][loseString] = {};
@@ -238,5 +242,9 @@ export default {
   cursor: pointer;
   font-size: 20px;
   margin-bottom: 5px
+}
+
+.get-all-matches {
+  margin-bottom: 5px;
 }
 </style>
