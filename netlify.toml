@@ -1,3 +1,3 @@
 [build]
-  command = "cp riot.txt ./build && yarn build"
+  command = "cp riot.txt build && yarn build"
   publish = "build"
