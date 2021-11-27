@@ -1,0 +1,3 @@
+[build]
+  command = "cp riot.txt && yarn build"
+  publish = "build"
