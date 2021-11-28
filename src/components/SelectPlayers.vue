@@ -158,13 +158,8 @@
         :player-names="players"
         :player-ids="puuids"
         :patch="patch"
+        @new-search="newSearch"
       />
-      <button
-        class="btn btn-secondary"
-        @click="newSearch"
-      >
-        New Search
-      </button>
     </div>
   </div>
 </template>
@@ -316,11 +311,11 @@ export default {
 }
 
 .btn-secondary, .btn-secondary:focus {
-  background-color: #67678f;
+  background-color: #5a5a7c;
 }
 
 .btn-secondary:hover {
-  background-color: #5a5a7c;
+  background-color: #67678f;
 }
 
 .summoner-input {

@@ -4,6 +4,16 @@
       style="font-weight: bold"
       class="row justify-content-end h2"
     >
+      <div
+        class="col-4 text-start"
+      >
+        <button
+          class="btn btn-secondary"
+          @click="$emit('new-search')"
+        >
+          New Search
+        </button>
+      </div>
       <div class="col-4">
         Team Win Rates
       </div>
@@ -99,6 +109,7 @@ export default {
       type: Object
     },
   },
+emits: ['new-search'],
   data() {
     return {
       filterByQueueType: false

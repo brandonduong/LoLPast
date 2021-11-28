@@ -14,10 +14,11 @@
     </small>
   </div>
 
-  <hr>
+  <hr style="width: 50%; margin-left: 25%">
   <WinrateHeader
     v-if="Object.keys(winrates).length > 0"
     :winrates="winrates"
+    @new-search="$emit('new-search')"
   />
 
   <div class="d-grid get-all-matches">
@@ -103,6 +104,7 @@ export default {
       type: String
     }
   },
+emits: ['new-search'],
   data() {
     return {
       matchDetails: [],
@@ -150,7 +152,7 @@ export default {
     getStyleForMatchId(matchId) {
       if (this.matchDetails.includes(matchId)) {
         return {
-          "background-color": '#819de7'
+          "background-color": '#819de7',
         }
       }
       return {
@@ -295,7 +297,7 @@ export default {
 .match {
   cursor: pointer;
   font-size: 20px;
-  margin-bottom: 5px
+  margin-bottom: 5px;
 }
 
 .get-all-matches {
