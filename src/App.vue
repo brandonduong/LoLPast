@@ -2,24 +2,31 @@
   <div class="body">
     <div id="app">
       <h1 class="lol-past">
-        <img
-          src="https://ddragon.leagueoflegends.com/cdn/11.23.1/img/item/2419.png"
-          alt="Stopwatch"
-          width="50"
-          height="50"
-          style="border-radius: 25%; transform: scaleX(-1); margin-bottom: 10px"
+        <a
+          href="/"
         >
+          <img
+            src="https://ddragon.leagueoflegends.com/cdn/11.23.1/img/item/2419.png"
+            alt="Stopwatch"
+            width="50"
+            height="50"
+            style="border-radius: 25%; transform: scaleX(-1); margin-bottom: 10px"
+          ></a>
         <a
           href="/"
           style="margin-bottom: 0"
         > LoLPast </a>
-        <img
-          src="https://ddragon.leagueoflegends.com/cdn/11.23.1/img/item/2419.png"
-          alt="Stopwatch"
-          width="50"
-          height="50"
-          style="border-radius: 25%; margin-bottom: 10px"
+        <a
+          href="/"
         >
+          <img
+            src="https://ddragon.leagueoflegends.com/cdn/11.23.1/img/item/2419.png"
+            alt="Stopwatch"
+            width="50"
+            height="50"
+            style="border-radius: 25%; margin-bottom: 10px"
+          >
+        </a>
       </h1>
       <!--
       <nav class="navbar navbar-expand navbar-dark bg-dark px-5">

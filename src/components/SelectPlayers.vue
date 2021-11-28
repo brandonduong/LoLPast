@@ -137,8 +137,9 @@
         </button>
         <hr>
         <a
-          class="btn btn-success coffee"
+          class="btn btn-success coffee shadow-none"
           href="https://ko-fi.com/brandonduong"
+          target="_blank"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -178,8 +179,9 @@
         @new-search="newSearch"
       />
       <a
-        class="btn btn-success coffee"
+        class="btn btn-success coffee shadow-none"
         href="https://ko-fi.com/brandonduong"
+        target="_blank"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -315,7 +317,7 @@ export default {
 <style>
 .submit-form {
   max-width: 350px;
-  margin: auto;
+  margin: auto auto 10px;
 }
 
 .loading-card {
@@ -385,5 +387,9 @@ export default {
   bottom: 5px;
   position: sticky;
   position: -webkit-sticky;
+}
+
+.coffee:hover {
+  background-color: #e0a3e3 !important;
 }
 </style>
