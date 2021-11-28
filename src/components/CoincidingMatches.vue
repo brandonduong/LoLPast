@@ -266,7 +266,6 @@ emits: ['new-search'],
   margin-bottom: 5px;
   margin-top: -5px;
   border-top-width: 0;
-  padding-left: 25px;
   overflow-x: auto;
 }
 

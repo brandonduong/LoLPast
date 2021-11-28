@@ -1,12 +1,11 @@
 <template>
   <div
     v-if="!loading"
-    class="container p-1"
+    class="container"
   >
     <div class="row flex-nowrap">
       <div
         class="col champion"
-        style="margin-left: 27px"
       />
       <div
         class="col-3"
@@ -63,7 +62,7 @@
         <div class="col-2 kda">
           KDA
         </div>
-        <div class="col-1 cs">
+        <div class="col-2 cs">
           CS
         </div>
         <div class="col-2 damage">
@@ -72,7 +71,7 @@
         <div class="col-2 role">
           Role
         </div>
-        <div class="col-2 gold">
+        <div class="col-1 gold">
           Gold
         </div>
       </div>
@@ -81,13 +80,15 @@
       <div
         v-for="(playerId, index) in allPlayerIds"
         :key="playerId + index"
-        :style="getVictorStyling(0)"
       >
         <div
           v-if="getPlayerIdIndex(playerId) < 5"
           class="row flex-nowrap"
         >
-          <div class="col champion">
+          <div
+            class="col champion"
+            :style="getVictorStyling(0)"
+          >
             <div class="row">
               <div class="col-6">
                 <div>
@@ -111,6 +112,7 @@
           <div
             class="col-2 player-name"
             style="text-align:start"
+            :style="getVictorStyling(0)"
           >
             <a
               data-bs-container="body"
@@ -126,19 +128,34 @@
               ><em>{{ decodeURIComponent(index) }}</em></small>
             </a>
           </div>
-          <div class="col-2 kda">
+          <div
+            class="col-2 kda"
+            :style="getVictorStyling(0)"
+          >
             {{ getKDA(playerId) }}
           </div>
-          <div class="col-1 cs">
+          <div
+            class="col-2 cs"
+            :style="getVictorStyling(0)"
+          >
             {{ getCS(playerId) }}
           </div>
-          <div class="col-2 damage">
+          <div
+            class="col-2 damage"
+            :style="getVictorStyling(0)"
+          >
             {{ getDamageDealtToChampions(playerId) }}
           </div>
-          <div class="col-2 role">
+          <div
+            class="col-2 role"
+            :style="getVictorStyling(0)"
+          >
             {{ getTeamPosition(playerId) }}
           </div>
-          <div class="col-2 gold">
+          <div
+            class="col-1 gold"
+            :style="getVictorStyling(0)"
+          >
             {{ getGold(playerId) }}
           </div>
         </div>
@@ -175,7 +192,7 @@
         <div class="col-2 kda">
           KDA
         </div>
-        <div class="col-1 cs">
+        <div class="col-2 cs">
           CS
         </div>
         <div class="col-2 damage">
@@ -184,7 +201,7 @@
         <div class="col-2 role">
           Role
         </div>
-        <div class="col-2 gold">
+        <div class="col-1 gold">
           Gold
         </div>
       </div>
@@ -193,13 +210,15 @@
       <div
         v-for="(playerId, index) in allPlayerIds"
         :key="playerId + index"
-        :style="getVictorStyling(1)"
       >
         <div
           v-if="getPlayerIdIndex(playerId) >= 5"
           class="row flex-nowrap"
         >
-          <div class="col champion">
+          <div
+            class="col champion"
+            :style="getVictorStyling(1)"
+          >
             <div class="row">
               <div class="col-6">
                 <div>
@@ -223,6 +242,7 @@
           <div
             class="col-2 player-name"
             style="text-align:start"
+            :style="getVictorStyling(1)"
           >
             <a
               data-bs-container="body"
@@ -238,19 +258,34 @@
               ><em>{{ decodeURIComponent(index) }}</em></small>
             </a>
           </div>
-          <div class="col-2 kda">
+          <div
+            class="col-2 kda"
+            :style="getVictorStyling(1)"
+          >
             {{ getKDA(playerId) }}
           </div>
-          <div class="col-1 cs">
+          <div
+            class="col-2 cs"
+            :style="getVictorStyling(1)"
+          >
             {{ getCS(playerId) }}
           </div>
-          <div class="col-2 damage">
+          <div
+            class="col-2 damage"
+            :style="getVictorStyling(1)"
+          >
             {{ getDamageDealtToChampions(playerId) }}
           </div>
-          <div class="col-2 role">
+          <div
+            class="col-2 role"
+            :style="getVictorStyling(1)"
+          >
             {{ getTeamPosition(playerId) }}
           </div>
-          <div class="col-2 gold">
+          <div
+            class="col-1 gold"
+            :style="getVictorStyling(1)"
+          >
             {{ getGold(playerId) }}
           </div>
         </div>
