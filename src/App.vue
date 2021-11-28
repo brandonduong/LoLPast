@@ -94,7 +94,7 @@ export default {
   font-weight: bold;
   font-size: 64px;
   font-family: Candara, serif;
-  padding-top: 50px;
+  padding-top: 65px;
 }
 
 a:active, a:link, a:visited, a:hover {

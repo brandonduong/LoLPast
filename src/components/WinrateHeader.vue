@@ -27,7 +27,7 @@
         <label
           class="btn btn-outline-dark shadow-none"
           for="filter"
-        >Filter By Queue Type</label>
+        >Filter By Queue</label>
       </div>
     </div>
     <div class="row">
