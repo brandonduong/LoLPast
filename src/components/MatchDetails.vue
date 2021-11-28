@@ -81,6 +81,7 @@
       <div
         v-for="(playerId, index) in allPlayerIds"
         :key="playerId + index"
+        :style="getVictorStyling(0)"
       >
         <div
           v-if="getPlayerIdIndex(playerId) < 5"
@@ -192,6 +193,7 @@
       <div
         v-for="(playerId, index) in allPlayerIds"
         :key="playerId + index"
+        :style="getVictorStyling(1)"
       >
         <div
           v-if="getPlayerIdIndex(playerId) >= 5"
@@ -407,6 +409,23 @@ export default {
     getVictor() {
       return this.matchInfo['teams'][0]['win'] // Whether or not blue team won
     },
+    getVictorStyling(team) {
+      switch (team) {
+        case 0:
+          if (this.getVictor()) {
+            return {'background-color': 'rgba(26,189,26,0.11)'}
+          } else {
+            return {'background-color': 'rgba(189,26,26,0.11)'}
+          }
+        case 1:
+          if (!this.getVictor()) {
+            return {'background-color': 'rgba(26,189,26,0.11)'}
+          } else {
+            return {'background-color': 'rgba(189,26,26,0.11)'}
+          }
+      }
+    }
+    ,
     getQueueType(queueId) {
       switch (queueId) {
         case 400:
@@ -417,8 +436,14 @@ export default {
           return '5v5 FLEX';
         case 450:
           return 'ARAM';
+        case 700:
+          return 'CLASH';
         case 900:
           return 'URF';
+        case 1020:
+          return 'ONE FOR ALL';
+        case 1300:
+          return 'NEXUS BLITZ';
         case 1400:
           return 'ULTIMATES';
 
@@ -429,6 +454,7 @@ export default {
     calculateTeamWinrate() {
       const blueTeam = [];
       const redTeam = [];
+      const queueType = this.getQueueType(this.matchInfo['queueId']);
       Object.keys(this.playerIds).forEach((playerName) => {
         const index = this.getPlayerIdIndex(this.playerIds[playerName]);
         if (index < 5) {
@@ -439,9 +465,9 @@ export default {
       })
 
       if (this.getVictor()) {
-        this.$emit('add-winrate', blueTeam, redTeam);
+        this.$emit('add-winrate', blueTeam, redTeam, queueType);
       } else {
-        this.$emit('add-winrate', redTeam, blueTeam);
+        this.$emit('add-winrate', redTeam, blueTeam, queueType);
       }
     }
   }

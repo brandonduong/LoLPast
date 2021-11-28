@@ -1,11 +1,29 @@
 <template>
   <div class="container p-1">
-    <h2 style="font-weight: bold">
-      Team Win Rates
-    </h2>
+    <div
+      style="font-weight: bold"
+      class="row justify-content-end h2"
+    >
+      <div class="col-4">
+        Team Win Rates
+      </div>
+      <div class="col-4 text-end">
+        <input
+          id="filter"
+          v-model="filterByQueueType"
+          type="checkbox"
+          class="btn-check"
+        >
+        <label
+          class="btn btn-outline-dark shadow-none"
+          for="filter"
+        >Filter By Queue Type</label>
+      </div>
+    </div>
     <div class="row">
       <div
         v-for="(rates, team) in winrates"
+        :key="team + rates"
         class="col win-rates"
       >
         <div class="card">
@@ -18,32 +36,47 @@
             <!-- Handle win/loss against other teams -->
             <div
               v-for="(rate, opponent) in rates"
+              :key="opponent + rate"
             >
               <div
-                v-if="isNaN(rate)"
                 class="row flex-nowrap h5"
               >
-                <div class="col">
+                <div class="col my-auto">
                   <b v-if="opponent">vs. {{ opponent }}</b>
                   <b v-else><em>vs. Others</em></b>
                 </div>
-                <div
-                  class="col-2 my-auto"
-                  style="min-width: 125px"
-                >
-                  <b>Wins:</b> {{ rate['wins'] }}
-                </div>
-                <div
-                  class="col-3 my-auto"
-                  style="min-width: 125px"
-                >
-                  <b>Losses:</b> {{ rate['losses'] }}
-                </div>
-                <div
-                  class="col-4 my-auto"
-                  style="min-width: 200px"
-                >
-                  <b>Win Rate:</b> {{ (rate['wins'] / (rate['wins'] + rate['losses']) * 100).toFixed(2) }} %
+                <div class="col-10 my-auto">
+                  <div
+                    v-for="(winrate, queueType) in filter(rate)"
+                    :key="opponent + queueType"
+                    class="row flex-nowrap h5"
+                    style="margin-top: 3px; margin-bottom: 3px"
+                  >
+                    <div
+                      class="col"
+                      style="min-width: 160px"
+                    >
+                      <b>{{ queueType }}</b>
+                    </div>
+                    <div
+                      class="col-2"
+                      style="min-width: 125px"
+                    >
+                      <b>Wins:</b> {{ winrate['wins'] }}
+                    </div>
+                    <div
+                      class="col-2"
+                      style="min-width: 125px"
+                    >
+                      <b>Losses:</b> {{ winrate['losses'] }}
+                    </div>
+                    <div
+                      class="col-4"
+                      style="min-width: 210px"
+                    >
+                      <b>Win Rate:</b> {{ (winrate['wins'] / (winrate['wins'] + winrate['losses']) * 100).toFixed(2) }} %
+                    </div>
+                  </div>
                 </div>
               </div>
               <hr v-if="Object.keys(rates).indexOf(opponent) !== Object.keys(rates).length - 1">
@@ -66,6 +99,25 @@ export default {
       type: Object
     },
   },
+  data() {
+    return {
+      filterByQueueType: false
+    }
+  },
+  methods: {
+    filter(rate) {
+      if (this.filterByQueueType) {
+        return rate;
+      } else {
+        const filtered = {"OVERALL": { "wins": 0, "losses": 0 }}
+        Object.keys(rate).forEach((queueType) => {
+          filtered['OVERALL']['wins'] += rate[queueType]['wins'];
+          filtered['OVERALL']['losses'] += rate[queueType]['losses'];
+        })
+        return filtered;
+      }
+    }
+  }
 }
 </script>
 
@@ -107,5 +159,13 @@ export default {
 
 .win-rate::-webkit-scrollbar-thumb:active {
   background: #282828;
+}
+
+.btn-outline-dark {
+  border-color: #5a5a7c;
+}
+
+.btn-outline-dark:hover, .btn-check:checked+.btn-outline-dark {
+  background-color: #5a5a7c !important;
 }
 </style>

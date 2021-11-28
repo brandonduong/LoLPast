@@ -204,7 +204,7 @@ export default {
         this.matchDetails.splice(index, 1);
       }
     },
-    addWinrate(winTeam, loseTeam) {
+    addWinrate(winTeam, loseTeam, queueType) {
       const winString = decodeURIComponent(winTeam.join(', '));
       const loseString = decodeURIComponent(loseTeam.join(', '));
       console.log(winString, loseString);
@@ -215,23 +215,40 @@ export default {
         if (!winTeam.length) {
           this.winrates[loseString] = {};
           this.winrates[loseString][winString] = {};
-          this.winrates[loseString][winString]['wins'] = 0;
-          this.winrates[loseString][winString]['losses'] = 1;
+          this.winrates[loseString][winString][queueType] = {};
+          this.winrates[loseString][winString][queueType]['wins'] = 0;
+          this.winrates[loseString][winString][queueType]['losses'] = 1;
         } else if (!loseTeam.length) {
           this.winrates[winString] = {};
           this.winrates[winString][loseString] = {};
-          this.winrates[winString][loseString]['wins'] = 1;
-          this.winrates[winString][loseString]['losses'] = 0;
+          this.winrates[winString][loseString][queueType] = {};
+          this.winrates[winString][loseString][queueType]['wins'] = 1;
+          this.winrates[winString][loseString][queueType]['losses'] = 0;
         } else {
           this.winrates[winString] = {};
           this.winrates[winString][loseString] = {};
-          this.winrates[winString][loseString]['wins'] = 1;
-          this.winrates[winString][loseString]['losses'] = 0;
+          this.winrates[winString][loseString][queueType] = {};
+          this.winrates[winString][loseString][queueType]['wins'] = 1;
+          this.winrates[winString][loseString][queueType]['losses'] = 0;
         }
       } else if (this.winrates[winString]) {
-          this.winrates[winString][loseString]['wins'] += 1;
+        if (this.winrates[winString][loseString][queueType]) {
+          this.winrates[winString][loseString][queueType]['wins'] += 1;
+        } else {
+          // Initialize queue type
+          this.winrates[winString][loseString][queueType] = {};
+          this.winrates[winString][loseString][queueType]['wins'] = 1;
+          this.winrates[winString][loseString][queueType]['losses'] = 0;
+        }
       } else if (this.winrates[loseString]) {
-          this.winrates[loseString][winString]['losses'] += 1;
+        if (this.winrates[loseString][winString][queueType]) {
+          this.winrates[loseString][winString][queueType]['losses'] += 1;
+        } else {
+          // Initialize queue type
+          this.winrates[loseString][winString][queueType] = {};
+          this.winrates[loseString][winString][queueType]['wins'] = 0;
+          this.winrates[loseString][winString][queueType]['losses'] = 1;
+        }
       }
       console.log(this.winrates);
     }
