@@ -1,5 +1,5 @@
 # LoLPast
-
+https://priceless-dubinsky-c1779f.netlify.app/
 ## Project setup
 ```
 yarn install
